@@ -1,63 +1,67 @@
- # Chessboard ASCII Art Generator
+def is_movable_piece(piece):
+    # Implement logic to check if the piece is movable
+    return True  # For now, assume all pieces are movable
 
-This code generates an ASCII representation of a chessboard. It uses a 2D array to store the pieces on the board, and a function to print the ASCII representation of each piece.
+def is_legal_move(piece, start_row, start_col, end_row, end_col):
+    # Implement logic to check if the move is legal according to chess rules
+    return True  # For now, assume all moves are legal
 
-## Code Explanation
+def make_move(start_row, start_col, end_row, end_col):
+    piece_at_location = board[start_row][start_col]
+    if not is_movable_piece(piece_at_location):
+        print("Invalid move: piece is not movable")
+        return
 
-### 1. Importing the necessary libraries
+    if not is_legal_move(piece_at_location, start_row, start_col, end_row, end_col):
+        print("Invalid move: move is not legal")
+        return
 
-```python
-import numpy as np
-```
+    board[end_row][end_col] = piece_at_location
+    board[start_row][start_col] = ""
 
-### 2. Defining the function to print the ASCII representation of each piece
+    print("Move successful!")
+    print_board()
 
-```python
-def print_piece(piece):
-    if piece == "p":
-        print("♙")  # Pawn (white)
-    elif piece == "P":
-        print("♟")  # Pawn (black)
-    elif piece == "r":
-        print("♖")  # Rook (white)
-    elif piece == "R":
-        print("♜")  # Rook (black)
-    elif piece == "n":
-        print("♘")  # Knight (white)
-    elif piece == "N":
-        print("♞")  # Knight (black)
-    elif piece == "b":
-        print("♗")  # Bishop (white)
-    elif piece == "B":
-        print("♝")  # Bishop (black)
-    elif piece == "q":
-        print("♕")  # Queen (white)
-    elif piece == "Q":
-        print("♛")  # Queen (black)
-    elif piece == "k":
-        print("♔")  # King (white)
-    elif piece == "K":
-        print("♚")  # King (black)
-    else:
-        print(" ")  # Empty square
-```
+def turn():
+    while True:
+        # Get start coordinates
+        file = input("Enter letter A-H: ")
+        file_lower = file.lower()
+        if file_lower not in "abcdefgh":
+            print("Invalid input. Please enter a letter between A and H.")
+            continue
+        index = input("Enter number 1-8 ")
+        try:
+            index = int(index)
+            if index < 1 or index > 8:
+                print("Invalid input. Please enter a number between 1 and 8.")
+                continue
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+            continue
 
-This function takes a single character as input, which represents the piece on the board. It then prints the corresponding ASCII representation of the piece.
+        start_row = index - 1
+        start_col = ord(file_lower) - ord('a')
 
-### 3. Creating the 2D array to store the pieces on the board
+        # Get destination coordinates
+        dest_file = input("Enter destination letter A-H: ")
+        dest_file_lower = dest_file.lower()
+        if dest_file_lower not in "abcdefgh":
+            print("Invalid input. Please enter a letter between A and H.")
+            continue
+        dest_index = input("Enter destination number 1-8 ")
+        try:
+            dest_index = int(dest_index)
+            if dest_index < 1 or dest_index > 8:
+                print("Invalid input. Please enter a number between 1 and 8.")
+                continue
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+            continue
 
-```python
-board = [[None for j in range(8)] for i in range(8)]
+        end_row = dest_index - 1
+        end_col = ord(dest_file_lower) - ord('a')
 
-```
+        make_move(start_row, start_col, end_row, end_col)
 
-This creates a 2D array with 8 rows and 8 columns. Each element of the array can store the piece occupying that square on the chessboard.
-
-### 4. Defining the function to display the board
-
-```python
-def display_board():
-    for i in range(8):
-        for j in range(8):
-            piece = board[i][j]
-            print_piece(piece),
+turn()

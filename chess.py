@@ -74,13 +74,51 @@ for i in range(8):
         else:
             print(f"{{{print_piece(board[i][j])}}}", end=" ")
     print()
-    
-def turn():
-    file = input("Enter letter A-H")
-    file_lower = file.lower()
-    index = input("Enter number 1-8")
-    index_lower = index.lower()
 
+# gain coordinates and validate input
+def turn():
+    while True:
+        # get piece and destination square
+        file = input("Enter letter A-H: ")
+        file_lower = file.lower()
+        if file_lower not in "abcdefgh":
+            print("Invalid input. Please enter a letter between A and H.")
+            continue
+        index = input("Enter number 1-8 ")
+        try:
+            index = int(index)
+            if index < 1 or index > 8:
+                print("Invalid input. Please enter a number between 1 and 8.")
+                continue
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+            continue
+        
+        # convert file letter to column index using ord which is a built in function that returns the Unicode code point for a give character which is 97 for a 
+        column_index  = ord(file_lower) - ord('a')
+        print(column_index)
+        
+        # convert index number to row index
+        row_index = index - 1
+        print(row_index)
+        
+        # use the validated input
+        print(f"File: {file_lower.capitalize()}, Index: {index}")
+        
+        # identify the piece at the selected location
+        
+        piece_at_location = board[row_index][column_index]
+
+def is_piece_movable(piece_at_location):
+    # implement the logic to check if the peace is movable
+    return True # for now assume all pieces are movable
+def is_legal_move(piece, start_row, start_column, end_row, end_column):
+    # implement logic to check if the move is legal according to the chess rules
+    return True # for now assume all moves are legal
+
+        
+
+turn()
 
 
 
