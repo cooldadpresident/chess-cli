@@ -1,67 +1,66 @@
-def is_movable_piece(piece):
-    # Implement logic to check if the piece is movable
-    return True  # For now, assume all pieces are movable
+def get_piece_symbol(piece):
+    pieces = {
+        "p": "♙",  # Pawn (white)
+        "P": "♟",  # Pawn (black)
+        "r": "♖",  # Rook (white)
+        "R": "♜",  # Rook (black)
+        "n": "♘",  # Knight (white)
+        "N": "♞",  # Knight (black)
+        "b": "♗",  # Bishop (white)
+        "B": "♝",  # Bishop (black)
+        "q": "♕",  # Queen (white)
+        "Q": "♛",  # Queen (black)
+        "k": "♔",  # King (white)
+        "K": "♚",  # King (black)
+    }
+    return pieces.get(piece, " ")  # return the piece symbol or an empty string if the piece is not found
 
-def is_legal_move(piece, start_row, start_col, end_row, end_col):
-    # Implement logic to check if the move is legal according to chess rules
-    return True  # For now, assume all moves are legal
+# Initialize the chessboard
+board = [
+    ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
+    ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+    ["", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", ""],
+    ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+    ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']
+]
 
-def make_move(start_row, start_col, end_row, end_col):
-    piece_at_location = board[start_row][start_col]
-    if not is_movable_piece(piece_at_location):
-        print("Invalid move: piece is not movable")
-        return
-
-    if not is_legal_move(piece_at_location, start_row, start_col, end_row, end_col):
-        print("Invalid move: move is not legal")
-        return
-
-    board[end_row][end_col] = piece_at_location
-    board[start_row][start_col] = ""
-
-    print("Move successful!")
-    print_board()
+def print_board():
+    for i in range(8):
+        for j in range(8):
+            if (i + j) % 2 == 0:
+                print(f"[{get_piece_symbol(board[i][j])}]", end=" ")
+            else:
+                print(f"{{{get_piece_symbol(board[i][j])}}}", end=" ")
+        print()
 
 def turn():
+    print_board()
     while True:
-        # Get start coordinates
-        file = input("Enter letter A-H: ")
-        file_lower = file.lower()
-        if file_lower not in "abcdefgh":
-            print("Invalid input. Please enter a letter between A and H.")
-            continue
-        index = input("Enter number 1-8 ")
-        try:
-            index = int(index)
-            if index < 1 or index > 8:
-                print("Invalid input. Please enter a number between 1 and 8.")
-                continue
-        except ValueError:
-            print("Invalid input. Please enter a number.")
-            continue
+        # Get the start position
+        start_file = input("Enter the start file (A-H): ").lower()
+        start_rank = int(input("Enter the start rank (1-8): "))
+        start_col = ord(start_file) - ord('a')
+        start_row = 8 - start_rank  # Convert rank to row index
 
-        start_row = index - 1
-        start_col = ord(file_lower) - ord('a')
+        # Get the destination position
+        dest_file = input("Enter the destination file (A-H): ").lower()
+        dest_rank = int(input("Enter the destination rank (1-8): "))
+        dest_col = ord(dest_file) - ord('a')
+        dest_row = 8 - dest_rank  # Convert rank to row index
 
-        # Get destination coordinates
-        dest_file = input("Enter destination letter A-H: ")
-        dest_file_lower = dest_file.lower()
-        if dest_file_lower not in "abcdefgh":
-            print("Invalid input. Please enter a letter between A and H.")
-            continue
-        dest_index = input("Enter destination number 1-8 ")
-        try:
-            dest_index = int(dest_index)
-            if dest_index < 1 or dest_index > 8:
-                print("Invalid input. Please enter a number between 1 and 8.")
-                continue
-        except ValueError:
-            print("Invalid input. Please enter a number.")
-            continue
+        # Move the piece
+        piece = board[start_row][start_col]
+        board[start_row][start_col] = ""
+        board[dest_row][dest_col] = piece
 
-        end_row = dest_index - 1
-        end_col = ord(dest_file_lower) - ord('a')
+        # Print the updated board
+        print_board()
 
-        make_move(start_row, start_col, end_row, end_col)
+        # Add logic for breaking the loop or continue to the next turn
+        if input("Do you want to continue? (y/n): ").lower() != 'y':
+            break
 
 turn()
