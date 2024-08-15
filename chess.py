@@ -27,6 +27,9 @@ for i in range(8):
         row.append("")
     board.append(row)
     
+# define a dictionary to represent the board
+'''board = {}
+for file in {}'''
 
 # Initialize the first rank with white pieces
 board[0][0] = 'r'  # Rook
