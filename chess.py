@@ -19,7 +19,6 @@ def get_piece_symbol(piece):
 
 
 # creates a 2D array board with 8 rows and 8 columns. Each element of the array can store the piece occupying that square on the chessboard
-    
 board = []
 for i in range(8):
     row = []
@@ -27,9 +26,6 @@ for i in range(8):
         row.append("")
     board.append(row)
     
-# define a dictionary to represent the board
-'''board = {}
-for file in {}'''
 
 # Initialize the first rank with white pieces
 board[0][0] = 'r'  # Rook
@@ -72,94 +68,59 @@ def print_board():
 
 
 # gain coordinates and validate input
-def turn():
-    print_board()
+def turn(player):
     while True:
+        
         # get the start position
-        start_file = input("Enter the start file (A-H): ").lower()
-        start_rank = int(input("Enter the start rank (1-8): "))
+        start_file = input(f"Enter the start file (A-H) for {player}: ").lower()
+        if start_file not in 'abcdefgh':
+            # to do add exception for value out of range 
+            print("Invalid input, not a letter or value out of range!!")
+            continue
+        try:
+            start_rank = int(input(f"Enter the start rank (1-8) for {player}: "))
+            if start_rank > 8 or start_rank < 1:
+                print("Invalid input, not a number or value out for range!!")
+                continue
+
+            
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+            continue
         start_column = ord(start_file) - ord('a')
         start_row = 8 - start_rank
-        
+                
         # get the destination position
-        destination_file = input("Enter the destination file (A-H): ").lower()
-        destination_rank = int(input("Enter the destination rank (1-8): "))
+        destination_file = input(f"Enter the destination file (A-H) for {player}: ").lower()
+        destination_rank = int(input(f"Enter the destination rank (1-8) for {player}: "))
         destination_column = ord(destination_file) - ord("a")
         destination_row = 8 - destination_rank
         
         # move the piece
         piece = board[start_row][start_column]
+        if player == "white" and piece.islower():
+            print("You can't move this piece it is not yours")
+            continue
+        if player == "black" and piece.isupper():
+            print("Invalid move, it is not your piece")
+            continue
+        
         board[start_row][start_column] = ""
         board[destination_row][destination_column] = piece
         
         # print the updated board
-        
         print_board()
         
+        # switch player
+        if player == "white":
+            return "black"
+        else:
+            return "white"
         
-        
-        
-        
-        
-        
-"""
-def turn():
-    
-    while True:
-        # get piece and destination square
-        piece_input = input("Enter piece (Pawn, Knight, Bishop, Rook, Queen, King): ")
-        piece_lower = piece_input.lower()
-        if piece_lower not in ["pawn", "knight", "bishop", "rook", "queen", "king"]:
-            print("Invalid input. Please enter a valid piece.")
-            continue
-        file = input("Enter letter A-H: ")
-        file_lower = file.lower()
-        if file_lower not in "abcdefgh":
-            print("Invalid input. Please enter a letter between A and H.")
-            continue
-        index = input("Enter number 1-8 ")
-        try:
-            index = int(index)
-            if index < 1 or index > 8:
-                print("Invalid input. Please enter a number between 1 and 8.")
-                continue
-        except ValueError:
-            print("Invalid input. Please enter a number.")
-            continue
-        
-        # convert file letter to column index using ord which is a built in function that returns the Unicode code point for a give character which is 97 for a 
-        column_index  = ord(file_lower) - ord('a')
-        print(column_index)
-        
-        # convert index number to row index
-        row_index = index - 1
-        print(row_index)
-        
-        # use the validated input
-        print(f"File: {file_lower.capitalize()}, Index: {index}")
-        
-        # identify the piece at the selected location
-        
-        print(piece_lower)
-        board[column_index][row_index] = 'P'
-        
-        """
-                
-'''
-def is_piece_movable(piece_at_location):
-    # implement the logic to check if the peace is movable
-    return True # for now assume all pieces are movable
-def is_legal_move(piece, start_row, start_column, end_row, end_column):
-    # implement logic to check if the move is legal according to the chess rules
-    return True # for now assume all moves are legal
-'''
-
-
-
-        
-
-turn()
-
+player = "white"
+print_board()
+while True:
+    player = turn(player)
 
 
 # chess board with its corresponding notation
