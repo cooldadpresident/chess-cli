@@ -1,3 +1,8 @@
+# constants
+BOARD_SIZE = 8
+RANKS = list(range(1, BOARD_SIZE + 1))
+FILES = 'abcdefgh'
+
 # function for defining ASCII figures for chess pieces
 # p = Pawn White, P = pawn black
 def get_piece_symbol(piece):
@@ -16,8 +21,12 @@ def get_piece_symbol(piece):
         "K": "K",  # King (black)
     }
     return pieces.get(piece, " ")  # return the piece symbol or an empty string if the piece is not found
+'''
+class ChessGame:
+    def __init__(self):
+        self.board = self.initialize
 
-
+'''
 # creates a 2D array board with 8 rows and 8 columns. Each element of the array can store the piece occupying that square on the chessboard
 board = []
 for i in range(8):
@@ -69,18 +78,17 @@ def print_board():
 
 # gain coordinates and validate input
 def turn(player):
-    while True:
-        
+    while True: 
         # get the start position
         start_file = input(f"Enter the start file (A-H) for {player}: ").lower()
         if start_file not in 'abcdefgh':
             # to do add exception for value out of range 
-            print("Invalid input, not a letter or value out of range!!")
+            print("Invalid input, not a letter or the value is out of range!!")
             continue
         try:
             start_rank = int(input(f"Enter the start rank (1-8) for {player}: "))
             if start_rank > 8 or start_rank < 1:
-                print("Invalid input, not a number or value out for range!!")
+                print("Invalid input, not a number or the value is out for range!!")
                 continue
 
             
@@ -94,7 +102,7 @@ def turn(player):
         destination_file = input(f"Enter the destination file (A-H) for {player}: ").lower()
         if destination_file not in 'abcdefgh':
             # todo add exception value out of range
-            print("Invalid destination file: Not a letter or the value is out of range")
+            print("Invalid input not a letter or the value is out of range")
             continue
         try:
             destination_rank = int(input(f"Enter the destination rank (1-8) for {player}: "))
