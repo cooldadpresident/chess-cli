@@ -92,7 +92,17 @@ def turn(player):
                 
         # get the destination position
         destination_file = input(f"Enter the destination file (A-H) for {player}: ").lower()
-        destination_rank = int(input(f"Enter the destination rank (1-8) for {player}: "))
+        if destination_file not in 'abcdefgh':
+            # todo add exception value out of range
+            print("Invalid destination file: Not a letter or the value is out of range")
+            continue
+        try:
+            destination_rank = int(input(f"Enter the destination rank (1-8) for {player}: "))
+            if destination_rank > 8 or destination_rank < 1:
+                print("Invalid input, not a number or value out of range!!")
+                continue
+        except ValueError:
+            print("Invalid input. Please enter a number.")
         destination_column = ord(destination_file) - ord("a")
         destination_row = 8 - destination_rank
         
