@@ -112,6 +112,12 @@ class ChessGame:
             
             # move the piece
             piece = self.board[start_row][start_column]
+            
+            # check if the square is not empty 
+            if piece == "":
+                print("Invalid move, start square is empty")
+                continue
+            
             if player == "white" and piece.islower():
                 print("You can't move this piece it is not yours")
                 continue
@@ -119,8 +125,9 @@ class ChessGame:
                 print("Invalid move, it is not your piece")
                 continue
             
+            
             self.board[start_row][start_column] = ""
-            self.oard[destination_row][destination_column] = piece
+            self.board[destination_row][destination_column] = piece
             
             # print the updated board
             self.print_board()
