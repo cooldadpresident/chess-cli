@@ -124,7 +124,16 @@ class ChessGame:
             if player == "black" and piece.isupper():
                 print("Invalid move, it is not your piece")
                 continue
-            
+            # check if the destination square contains a piece of the same player color
+            destination_piece = self.board[destination_row][destination_column]
+            if destination_piece != "":
+                if player == "white" and destination_piece.islower():
+                    print("Invalid move, you can't capture your own piece")
+                    continue
+                if player == "black" and destination_piece.isupper():
+                    print("Invalid mode, you can't capture your own piece")
+                    continue
+                
             
             self.board[start_row][start_column] = ""
             self.board[destination_row][destination_column] = piece
