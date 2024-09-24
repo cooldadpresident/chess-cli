@@ -5,7 +5,7 @@ def get_piece_symbol(piece):
         "p": "p",  # Pawn (white)
         "P": "P",  # Pawn (black)
         "r": "r",  # Rook (white)
-        "R": "R",  # Rook (black)oard
+        "R": "R",  # Rook (black)
         "n": "n",  # Knight (white)
         "N": "N",  # Knight (black)
         "b": "b",  # Bishop (white)
