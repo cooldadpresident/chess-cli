@@ -58,9 +58,17 @@ class Game:
                 while True:
                         try:
                                 move = input("Enter your move: (e.g. e2e4): ")
-                                # validate and execute the move
-                                # ..
+                                # validate 
+                                if not self.validate_move(move):
+                                        raise ValueError("Invalid move")
+                                # execute the move
+                                self.execute_move(move)
+                                # switch turns
+                                self.current_turn = "black" if self.current_turn == "white" else "white"
+                                break
                         except ValueError as e:
                                 print("Invalid move: {e}")
-
-                                
+        def execute_move(self, move):
+                pass
+        def validate_move(self, move):
+                pass
