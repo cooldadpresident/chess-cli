@@ -1,7 +1,9 @@
 # game.py
 
 class Game:
+        # initialize the game
         def __init__(self):
+                
                 self.board = self.initialize_board()
                 self.current_turn = "white"
         
