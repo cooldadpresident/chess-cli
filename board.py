@@ -25,11 +25,11 @@ def print_board(board, player_turn):
     
     # Determine row order and labels based on player turn
     if player_turn == 1:  # White's perspective
-        row_range = range(7, -1, -1)  # 8 to 1
-        row_labels = range(1, 9)      # 1 to 8
-    else:  # Black's perspective
         row_range = range(8)          # 1 to 8
         row_labels = range(8, 0, -1)  # 8 to 1
+    else:  # Black's perspective
+        row_range = range(7, -1, -1)  # 8 to 1
+        row_labels = range(1, 9)      # 1 to 8
     
     print(columns)
     
