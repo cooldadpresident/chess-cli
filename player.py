@@ -20,13 +20,18 @@ def move_piece(board, start, end):
     if board[start_row][start_col] == " ":
         print("No piece at the starting position.")
         return False
-    
+    if board[end_row][end_col] == " ":
+        print("Destination position is empty.")
+        return False
+
+    # Check if the player is moving their own piece
+    if board[start_row][start_col].color == board[end_row][end_col].color:
+        print("You cannot move your own piece.")
+        return False
+
+
     # Move the piece
     board[end_row][end_col] = board[start_row][start_col]
     board[start_row][start_col] = " "
     return True
-
-def flip_board(board):
-    # Reverse each row to simulate flipping the pieces
-    return [row[::-1] for row in board[::-1]]
 

@@ -1,7 +1,7 @@
 # game.py
 
 from board import initialize_board, print_board
-from player import get_player_move, move_piece, flip_board
+from player import get_player_move, move_piece 
 
 def main():
     board = initialize_board()  # Set up the initial board
@@ -14,7 +14,6 @@ def main():
         start, end = get_player_move()  # Get the player's move
         
         if move_piece(board, start, end):  # Attempt to move the piece
-            board = flip_board(board)  # Flip the board after a successful move
             player_turn *= -1  # Switch turns
 
 if __name__ == "__main__":
