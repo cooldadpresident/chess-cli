@@ -20,15 +20,14 @@ def move_piece(board, start, end):
     if board[start_row][start_col] == " ":
         print("No piece at the starting position.")
         return False
-    if board[end_row][end_col] == " ":
-        print("Destination position is empty.")
+    if board[end_row][end_col] != " ":
+        print("Destination position is not empty.")
         return False
 
     # Check if the player is moving their own piece
     if board[start_row][start_col].color == board[end_row][end_col].color:
-        print("You cannot move your own piece.")
+        print("You cannot move onto your own piece!")
         return False
-
 
     # Move the piece
     board[end_row][end_col] = board[start_row][start_col]

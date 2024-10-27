@@ -4,8 +4,10 @@ from board import initialize_board, print_board
 from player import get_player_move, move_piece 
 
 def main():
+    white = 1
+    black = -1
     board = initialize_board()  # Set up the initial board
-    player_turn = 1  # 1 for white, -1 for black
+    player_turn = white # 1 for white, -1 for black
     
     while True:
         print_board(board, player_turn)  # Pass player_turn to print_board
