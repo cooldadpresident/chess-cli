@@ -13,9 +13,10 @@ def initialize_board():
         ["R", "N", "B", "Q", "K", "B", "N", "R"]
     ]
     return board
-
 def print_board(board, player_turn):
     # ANSI escape codes for colors
+    
+    
     WHITE_BG = "\033[47m"
     BLACK_BG = "\033[40m"
     RESET = "\033[0m"

@@ -25,11 +25,15 @@ def move_piece(board, start, end):
         return False
 
     # Check if the player is moving their own piece
+    '''
+    to do!
     if board[start_row][start_col].color == board[end_row][end_col].color:
         print("You cannot move onto your own piece!")
         return False
 
-    # Move the piece
+ 
+    '''
+       # Move the piece
     board[end_row][end_col] = board[start_row][start_col]
     board[start_row][start_col] = " "
     return True

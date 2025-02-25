@@ -16,7 +16,7 @@ def main():
         start, end = get_player_move()  # Get the player's move
         
         if move_piece(board, start, end):  # Attempt to move the piece
-            player_turn *= -1  # Switch turns
+            player_turn *= black  # Switch turns
 
 if __name__ == "__main__":
     main()  # Start the game
