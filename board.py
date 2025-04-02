@@ -15,41 +15,50 @@ def initialize_board():
     return board
 
 def print_board(board, player_turn):
-    # ANSI escape codes for colors
-    
-    
-    WHITE_BG = "\033[47m"
-    BLACK_BG = "\033[40m"
+    """Print the chess board with improved formatting"""
+    # ANSI color codes
+    WHITE_PIECE = "\033[97m"    # Bright white for white pieces
+    BLACK_PIECE = "\033[30m"    # Black for black pieces
+    WHITE_SQUARE = "\033[47m"   # White background
+    BLACK_SQUARE = "\033[43m"   # Yellow background
     RESET = "\033[0m"
     
-    # Column labels (always the same)
-    columns = "  a b c d e f g h"
+    # Unicode chess pieces
+    pieces = {
+        'K': '♔', 'Q': '♕', 'R': '♖', 'B': '♗', 'N': '♘', 'P': '♙',
+        'k': '♚', 'q': '♛', 'r': '♜', 'b': '♝', 'n': '♞', 'p': '♟'
+    }
     
-    # Determine row order and labels based on player turn
-    if player_turn == 1:  # White's perspective
-        row_range = range(8)          # 1 to 8
-        row_labels = range(8, 0, -1)  # 8 to 1
-    else:  # Black's perspective
-        row_range = range(7, -1, -1)  # 8 to 1
-        row_labels = range(1, 9)      # 1 to 8
+    # Board border
+    horizontal_line = "   +" + "-" * 33 + "+"
     
-    print(columns)
+    # Print column labels
+    print("\n     a   b   c   d   e   f   g   h")
+    print(horizontal_line)
     
-    for i, row_label in zip(row_range, row_labels):
-        row = board[i]
+    # Determine row order based on player's turn
+    rows = range(8) if player_turn == 1 else range(7, -1, -1)
+    
+    for i in rows:
+        # Print row number
+        print(f" {8-i} |", end=" ")
         
-        print(row_label, end=" ")
-        
-        for j, piece in enumerate(row):
-            # Alternate colors for squares
-            if (i + j) % 2 == 0:
-                print(WHITE_BG + piece + RESET, end=" ")
+        for j in range(8):
+            # Determine square color
+            is_white_square = (i + j) % 2 == 0
+            bg_color = WHITE_SQUARE if is_white_square else BLACK_SQUARE
+            
+            # Get piece and its color
+            piece = board[i][j]
+            if piece != '.':
+                piece_color = WHITE_PIECE if piece.isupper() else BLACK_PIECE
+                piece_symbol = pieces.get(piece, piece)
+                print(f"{bg_color}{piece_color} {piece_symbol} {RESET}", end="")
             else:
-                print(BLACK_BG + piece + RESET, end=" ")
-        
-        # Print row label again at the end of the row
-        print(row_label)
+                print(f"{bg_color}   {RESET}", end="")
+                
+        print(f" | {8-i}")
     
-    # Print column labels again at the bottom
-    print(columns)
+    print(horizontal_line)
+    print("     a   b   c   d   e   f   g   h\n")
 
