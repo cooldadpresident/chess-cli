@@ -19,8 +19,8 @@ def print_board(board, player_turn):
     # ANSI color codes
     WHITE_PIECE = "\033[97m"    # Bright white for white pieces
     BLACK_PIECE = "\033[30m"    # Black for black pieces
-    WHITE_SQUARE = "\033[47m"   # White background
-    BLACK_SQUARE = "\033[43m"   # Yellow background
+    LIGHT_SQUARE = "\033[105m"  # Light purple background
+    DARK_SQUARE = "\033[45m"    # Dark purple background
     RESET = "\033[0m"
     
     # Unicode chess pieces
@@ -32,23 +32,16 @@ def print_board(board, player_turn):
     # Board border
     horizontal_line = "   +" + "-" * 33 + "+"
     
-    # Print column labels
     print("\n     a   b   c   d   e   f   g   h")
     print(horizontal_line)
     
-    # Determine row order based on player's turn
-    rows = range(8) if player_turn == 1 else range(7, -1, -1)
-    
-    for i in rows:
-        # Print row number
+    for i in range(8):
         print(f" {8-i} |", end=" ")
         
         for j in range(8):
-            # Determine square color
-            is_white_square = (i + j) % 2 == 0
-            bg_color = WHITE_SQUARE if is_white_square else BLACK_SQUARE
+            is_light_square = (i + j) % 2 == 0
+            bg_color = LIGHT_SQUARE if is_light_square else DARK_SQUARE
             
-            # Get piece and its color
             piece = board[i][j]
             if piece != '.':
                 piece_color = WHITE_PIECE if piece.isupper() else BLACK_PIECE
