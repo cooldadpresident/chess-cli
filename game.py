@@ -2,6 +2,7 @@
 
 from board import initialize_board, print_board
 from player import get_player_move, move_piece
+from ai import ChessAI
 
 def get_piece_color(board, position):
     """Returns 1 for white pieces, -1 for black pieces, 0 for empty squares"""
@@ -133,6 +134,23 @@ def main():
     board = initialize_board()
     player_turn = white
     
+    # Get game mode
+    while True:
+        mode = input("Select mode (1 for Player vs Player, 2 for Player vs AI): ").strip()
+        if mode in ['1', '2']:
+            break
+        print("Invalid choice. Please enter 1 or 2.")
+    
+    # Initialize AI if needed
+    ai = None
+    if mode == '2':
+        while True:
+            diff = input("Select AI difficulty (1-5): ").strip()
+            if diff in ['1', '2', '3', '4', '5']:
+                ai = ChessAI(difficulty=int(diff))
+                break
+            print("Invalid choice. Please enter a number between 1 and 5.")
+    
     while True:
         print_board(board, player_turn)
         
@@ -142,7 +160,12 @@ def main():
             
         print(f"Player {'White' if player_turn == 1 else 'Black'}'s turn")
         
-        start, end = get_player_move()
+        # Get move (from player or AI)
+        if mode == '2' and player_turn == black:
+            start, end = ai.get_best_move(board, player_turn)
+            print(f"AI moves from {chr(start[1] + ord('a'))}{8-start[0]} to {chr(end[1] + ord('a'))}{8-end[0]}")
+        else:
+            start, end = get_player_move()
         
         # Check if player is trying to move their own piece
         piece_color = get_piece_color(board, start)
