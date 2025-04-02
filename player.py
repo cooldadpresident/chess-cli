@@ -1,3 +1,5 @@
+from chess_utils import make_move
+
 def get_player_move():
     try:
         start = input("Enter the starting position (e.g., 'e2'): ").strip().lower()
@@ -13,11 +15,10 @@ def get_player_move():
         return get_player_move()
 
 def move_piece(board, start, end):
-    start_row, start_col = start
-    end_row, end_col = end
-    
-    # Move the piece
-    board[end_row][end_col] = board[start_row][start_col]
-    board[start_row][start_col] = '.'
+    """Execute a move on the actual game board"""
+    new_board = make_move(board, start, end)
+    for i in range(8):
+        for j in range(8):
+            board[i][j] = new_board[i][j]
     return True
 

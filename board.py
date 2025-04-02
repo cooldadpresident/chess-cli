@@ -32,11 +32,17 @@ def print_board(board, player_turn):
     # Board border
     horizontal_line = "   +" + "-" * 33 + "+"
     
-    print("\n     a   b   c   d   e   f   g   h")
+    # Determine row order based on player's turn
+    rows = range(8) if player_turn == 1 else range(7, -1, -1)
+    row_labels = range(8, 0, -1) if player_turn == 1 else range(1, 9)
+    col_labels = "a b c d e f g h" if player_turn == 1 else "h g f e d c b a"
+    
+    # Print column labels
+    print(f"\n     {col_labels}")
     print(horizontal_line)
     
-    for i in range(8):
-        print(f" {8-i} |", end=" ")
+    for i, row_label in zip(rows, row_labels):
+        print(f" {row_label} |", end=" ")
         
         for j in range(8):
             is_light_square = (i + j) % 2 == 0
@@ -50,8 +56,8 @@ def print_board(board, player_turn):
             else:
                 print(f"{bg_color}   {RESET}", end="")
                 
-        print(f" | {8-i}")
+        print(f" | {row_label}")
     
     print(horizontal_line)
-    print("     a   b   c   d   e   f   g   h\n")
+    print(f"     {col_labels}\n")
 

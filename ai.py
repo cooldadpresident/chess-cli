@@ -1,9 +1,8 @@
-from game import is_valid_move, get_piece_color, would_be_in_check
+from chess_utils import is_valid_move, get_piece_color, would_be_in_check, make_move
 
 class ChessAI:
     def __init__(self, difficulty=3):
         self.difficulty = difficulty
-        # Piece values for board evaluation
         self.piece_values = {
             'p': -1, 'P': 1,   # Pawns
             'n': -3, 'N': 3,   # Knights
@@ -43,11 +42,7 @@ class ChessAI:
         if maximizing_player:
             max_eval = float('-inf')
             for start, end in self.get_all_valid_moves(board, color):
-                # Make temporary move
-                temp_board = [row[:] for row in board]
-                temp_board[end[0]][end[1]] = temp_board[start[0]][start[1]]
-                temp_board[start[0]][start[1]] = '.'
-                
+                temp_board = make_move(board, start, end)
                 eval = self.minimax(temp_board, depth - 1, alpha, beta, False, -color)
                 max_eval = max(max_eval, eval)
                 alpha = max(alpha, eval)
@@ -57,11 +52,7 @@ class ChessAI:
         else:
             min_eval = float('inf')
             for start, end in self.get_all_valid_moves(board, -color):
-                # Make temporary move
-                temp_board = [row[:] for row in board]
-                temp_board[end[0]][end[1]] = temp_board[start[0]][start[1]]
-                temp_board[start[0]][start[1]] = '.'
-                
+                temp_board = make_move(board, start, end)
                 eval = self.minimax(temp_board, depth - 1, alpha, beta, True, color)
                 min_eval = min(min_eval, eval)
                 beta = min(beta, eval)
@@ -77,10 +68,7 @@ class ChessAI:
         beta = float('inf')
         
         for start, end in self.get_all_valid_moves(board, color):
-            temp_board = [row[:] for row in board]
-            temp_board[end[0]][end[1]] = temp_board[start[0]][start[1]]
-            temp_board[start[0]][start[1]] = '.'
-            
+            temp_board = make_move(board, start, end)
             eval = self.minimax(temp_board, self.difficulty - 1, alpha, beta, False, color)
             if eval > best_eval:
                 best_eval = eval
