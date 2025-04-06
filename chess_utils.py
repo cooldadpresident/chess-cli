@@ -230,3 +230,22 @@ def handle_promotion(board, end, color):
             board[end_row][end_col] = choice if color == 1 else choice.lower()
             return True
     return False
+
+def is_checkmate(board, color):
+    """Check if the given color is in checkmate"""
+    # First check if king is in check
+    if not is_in_check(board, color):
+        return False
+        
+    # Try all possible moves to see if any can get out of check
+    for i in range(8):
+        for j in range(8):
+            if board[i][j] != '.' and get_piece_color(board, (i, j)) == color:
+                for x in range(8):
+                    for y in range(8):
+                        if is_valid_move(board, (i, j), (x, y), board[i][j]):
+                            # Try the move
+                            temp_board = make_move(board, (i, j), (x, y))
+                            if not is_in_check(temp_board, color):
+                                return False
+    return True

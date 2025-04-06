@@ -1,4 +1,4 @@
-from chess_utils import is_valid_move, get_piece_color, would_be_in_check, make_move
+from chess_utils import is_valid_move, get_piece_color, would_be_in_check, make_move, is_in_check
 
 class ChessAI:
     def __init__(self, difficulty=3):
@@ -101,7 +101,13 @@ class ChessAI:
         """Gets the best move for the AI with thinking process output"""
         self.nodes_evaluated = 0
         moves = self.get_all_valid_moves(board, color)
+        
+        # Check for checkmate or stalemate
         if not moves:
+            if is_in_check(board, color):
+                print("\nCheckmate! Game Over.")
+            else:
+                print("\nStalemate! Game Over.")
             return None
 
         best_move = None
@@ -132,8 +138,10 @@ class ChessAI:
                     best_move = (start, end)
                     print(f"New best move! {move_str} (score: {value})")
 
-        print(f"\nFinal decision:")
-        print(f"→ Move: {chr(best_move[0][1] + ord('a'))}{8-best_move[0][0]} to {chr(best_move[1][1] + ord('a'))}{8-best_move[1][0]}")
-        print(f"→ Score: {best_value}")
-        print(f"→ Positions evaluated: {self.nodes_evaluated}\n")
+        if best_move:
+            print(f"\nFinal decision:")
+            print(f"→ Move: {chr(best_move[0][1] + ord('a'))}{8-best_move[0][0]} to {chr(best_move[1][1] + ord('a'))}{8-best_move[1][0]}")
+            print(f"→ Score: {best_value}")
+            print(f"→ Positions evaluated: {self.nodes_evaluated}\n")
+        
         return best_move

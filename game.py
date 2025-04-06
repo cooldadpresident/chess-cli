@@ -3,7 +3,7 @@
 from board import initialize_board, print_board
 from player import get_player_move, move_piece
 from ai import ChessAI
-from chess_utils import get_piece_color, is_valid_move, would_be_in_check, is_in_check
+from chess_utils import get_piece_color, is_valid_move, would_be_in_check, is_in_check, is_checkmate
 
 def main():
     white = 1
@@ -34,15 +34,24 @@ def main():
         # Show check status
         if is_in_check(board, player_turn):
             print("Check!")
-            
+            if is_checkmate(board, player_turn):
+                print(f"Checkmate! {'Black' if player_turn == -1 else 'White'} wins!")
+                break
+        
         print(f"Player {'White' if player_turn == 1 else 'Black'}'s turn")
         
         # Get move (from player or AI)
         if mode == '2' and player_turn == black:
-            start, end = ai.get_best_move(board, player_turn)
-            print(f"AI moves from {chr(start[1] + ord('a'))}{8-start[0]} to {chr(end[1] + ord('a'))}{8-end[0]}")
+            move = ai.get_best_move(board, player_turn)
+            if move is None:
+                break
+            start, end = move
         else:
-            start, end = get_player_move()
+            try:
+                start, end = get_player_move()
+            except (ValueError, IndexError):
+                print("Invalid move format! Use e.g., 'e2'")
+                continue
         
         # Check if player is trying to move their own piece
         piece_color = get_piece_color(board, start)
