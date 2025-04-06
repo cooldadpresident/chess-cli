@@ -8,21 +8,35 @@ def get_piece_color(board, position):
     return 0
 
 def make_move(board, start, end):
-    """Make a move on the board and return the new board state"""
+    """Update move execution to handle castling"""
     temp_board = [row[:] for row in board]
     piece = temp_board[start[0]][start[1]]
+    
+    # Handle castling
+    if piece.lower() == 'k' and abs(end[1] - start[1]) == 2:
+        # Move king
+        temp_board[end[0]][end[1]] = piece
+        temp_board[start[0]][start[1]] = '.'
+        
+        # Move rook
+        if end[1] == 6:  # Kingside
+            rook_start = (start[0], 7)
+            rook_end = (start[0], 5)
+        else:  # Queenside
+            rook_start = (start[0], 0)
+            rook_end = (start[0], 3)
+            
+        temp_board[rook_end[0]][rook_end[1]] = temp_board[rook_start[0]][rook_start[1]]
+        temp_board[rook_start[0]][rook_start[1]] = '.'
+        return temp_board
+        
+    # Normal move
     temp_board[end[0]][end[1]] = piece
     temp_board[start[0]][start[1]] = '.'
-    
-    # Handle promotion
-    if is_promotion_move(temp_board, start, end):
-        color = 1 if piece.isupper() else -1
-        handle_promotion(temp_board, end, color)
-    
     return temp_board
 
 def is_valid_move(board, start, end, piece):
-    """Validates if a piece can move to the target position"""
+    """Update move validation to include castling"""
     start_row, start_col = start
     end_row, end_col = end
     
@@ -79,11 +93,72 @@ def is_valid_move(board, start, end, piece):
         if row_diff == 0 or col_diff == 0 or abs(row_diff) == abs(col_diff):
             return is_path_clear(board, start, end)
     
-    # King movement
-    elif piece == 'k':
-        return abs(row_diff) <= 1 and abs(col_diff) <= 1
+    # King movement including castling
+    elif piece.lower() == 'k':
+        if abs(row_diff) <= 1 and abs(col_diff) <= 1:
+            return True
+        # Check for castling
+        return can_castle(board, start, end, piece)
     
     return False
+
+def can_castle(board, start, end, piece):
+    """Check if castling is legal"""
+    start_row, start_col = start
+    end_row, end_col = end
+    
+    # Basic castling conditions
+    if piece.lower() != 'k':  # Must be king
+        return False
+    if start_row != (7 if piece.isupper() else 0):  # Must be on back rank
+        return False
+    if start_col != 4:  # King must be on e1/e8
+        return False
+    if end_row != start_row:  # Must be horizontal move
+        return False
+    if abs(end_col - start_col) != 2:  # Must move two squares
+        return False
+        
+    # Check if king or rook has moved
+    if piece.isupper():  # White
+        if start != (7, 4):  # King must be on e1
+            return False
+        if end_col == 6:  # Kingside
+            rook_pos = (7, 7)
+            path_cols = [5, 6]
+        else:  # Queenside
+            rook_pos = (7, 0)
+            path_cols = [1, 2, 3]
+    else:  # Black
+        if start != (0, 4):  # King must be on e8
+            return False
+        if end_col == 6:  # Kingside
+            rook_pos = (0, 7)
+            path_cols = [5, 6]
+        else:  # Queenside
+            rook_pos = (0, 0)
+            path_cols = [1, 2, 3]
+    
+    # Check if rook is present
+    rook = 'R' if piece.isupper() else 'r'
+    if board[rook_pos[0]][rook_pos[1]] != rook:
+        return False
+        
+    # Check if path is clear
+    for col in path_cols:
+        if board[start_row][col] != '.':
+            return False
+            
+    # Check if king passes through check
+    color = 1 if piece.isupper() else -1
+    direction = 1 if end_col > start_col else -1
+    temp_col = start_col
+    while temp_col != end_col:
+        temp_col += direction
+        if would_be_in_check(board, (start_row, start_col), (start_row, temp_col), color):
+            return False
+            
+    return True
 
 def is_path_clear(board, start, end):
     """Check if there are any pieces between start and end positions"""
