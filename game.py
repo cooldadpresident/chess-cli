@@ -49,8 +49,12 @@ def main():
         else:
             try:
                 start, end = get_player_move()
-            except (ValueError, IndexError):
-                print("Invalid move format! Use e.g., 'e2'")
+                # If playing as black, flip the coordinates
+                if player_turn == black:
+                    start = (7 - start[0], 7 - start[1])
+                    end = (7 - end[0], 7 - end[1])
+            except ValueError as e:
+                print(str(e))
                 continue
         
         # Check if player is trying to move their own piece
