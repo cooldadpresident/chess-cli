@@ -65,7 +65,7 @@ class ChessAI:
         return moves
 
     def minimax(self, board, depth, alpha, beta, maximizing_player):
-        """Minimax algorithm with node counting"""
+        """Minimax algorithm with alpha-beta pruning"""
         self.nodes_evaluated += 1
         if depth == 0:
             return self.evaluate_board(board)
@@ -73,8 +73,9 @@ class ChessAI:
         color = 1 if maximizing_player else -1
         moves = self.get_all_valid_moves(board, color)
         
+        # No legal moves
         if not moves:
-            if would_be_in_check(board, None, None, color):
+            if is_in_check(board, color):  # Changed from would_be_in_check
                 return -9999 if maximizing_player else 9999  # Checkmate
             return 0  # Stalemate
 
@@ -103,39 +104,36 @@ class ChessAI:
         moves = self.get_all_valid_moves(board, color)
         
         if not moves:
-            if is_in_check(board, color):
+            if is_in_check(board, color):  # Changed from would_be_in_check
                 print("\nCheckmate! Game Over.")
             else:
                 print("\nStalemate! Game Over.")
             return None
 
         best_move = None
-        if color == 1:  # White (maximizing)
-            best_value = float('-inf')
-            print("\nAI Thinking Process (White):")
-            print("Higher scores are better for White")
-        else:  # Black (minimizing)
-            best_value = float('inf')
-            print("\nAI Thinking Process (Black):")
-            print("Lower scores are better for Black")
+        best_value = float('-inf') if color == 1 else float('inf')
+
+        print(f"\nAI Thinking Process ({'White' if color == 1 else 'Black'}):")
+        print(f"{'Higher' if color == 1 else 'Lower'} scores are better")
 
         for start, end in moves:
             temp_board = make_move(board, start, end)
             value = self.minimax(temp_board, self.difficulty - 1, float('-inf'), float('inf'), color != 1)
             move_str = f"{chr(start[1] + ord('a'))}{8-start[0]} → {chr(end[1] + ord('a'))}{8-end[0]}"
             
-            # Show evaluation with clear indication
             advantage = "White" if value > 0 else "Black"
             print(f"Move {move_str}: score = {value} (favors {advantage})")
             
-            if (color == 1 and value > best_value) or (color == -1 and value < best_value):
+            if ((color == 1 and value > best_value) or 
+                (color == -1 and value < best_value)):
                 best_value = value
                 best_move = (start, end)
                 print(f"✓ New best move! {move_str}")
 
-        print(f"\nFinal decision:")
-        print(f"→ Move: {chr(best_move[0][1] + ord('a'))}{8-best_move[0][0]} to {chr(best_move[1][1] + ord('a'))}{8-best_move[1][0]}")
-        print(f"→ Final score: {best_value}")
-        print(f"→ Positions evaluated: {self.nodes_evaluated}\n")
+        if best_move:
+            print(f"\nFinal decision:")
+            print(f"→ Move: {chr(best_move[0][1] + ord('a'))}{8-best_move[0][0]} to {chr(best_move[1][1] + ord('a'))}{8-best_move[1][0]}")
+            print(f"→ Final score: {best_value}")
+            print(f"→ Positions evaluated: {self.nodes_evaluated}\n")
         
         return best_move
