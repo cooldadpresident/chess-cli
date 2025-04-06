@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 def get_piece_color(board, position):
     """Returns 1 for white pieces, -1 for black pieces, 0 for empty squares"""
     piece = board[position[0]][position[1]]
@@ -249,3 +251,9 @@ def is_checkmate(board, color):
                             if not is_in_check(temp_board, color):
                                 return False
     return True
+
+@lru_cache(maxsize=1000)
+def evaluate_cached_position(board_tuple):
+    """Cached position evaluation"""
+    board = list(map(list, board_tuple))
+    # ... evaluation logic

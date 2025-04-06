@@ -5,6 +5,17 @@ from player import get_player_move, move_piece
 from ai import ChessAI
 from chess_utils import get_piece_color, is_valid_move, would_be_in_check, is_in_check, is_checkmate
 
+def save_game(board, player_turn, filename):
+    """Save current game state to file"""
+    import json
+    game_state = {
+        'board': board,
+        'player_turn': player_turn,
+        'history': game_history.moves
+    }
+    with open(filename, 'w') as f:
+        json.dump(game_state, f)
+
 def main():
     white = 1
     black = -1
