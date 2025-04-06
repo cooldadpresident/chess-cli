@@ -10,8 +10,15 @@ def get_piece_color(board, position):
 def make_move(board, start, end):
     """Make a move on the board and return the new board state"""
     temp_board = [row[:] for row in board]
-    temp_board[end[0]][end[1]] = temp_board[start[0]][start[1]]
+    piece = temp_board[start[0]][start[1]]
+    temp_board[end[0]][end[1]] = piece
     temp_board[start[0]][start[1]] = '.'
+    
+    # Handle promotion
+    if is_promotion_move(temp_board, start, end):
+        color = 1 if piece.isupper() else -1
+        handle_promotion(temp_board, end, color)
+    
     return temp_board
 
 def is_valid_move(board, start, end, piece):
@@ -129,3 +136,22 @@ def would_be_in_check(board, start, end, color):
     """Check if making a move would put/leave own king in check"""
     temp_board = make_move(board, start, end)
     return is_in_check(temp_board, color)
+
+def is_promotion_move(board, start, end):
+    """Check if move is a pawn promotion"""
+    piece = board[start[0]][start[1]]
+    if piece.lower() != 'p':
+        return False
+    
+    # White pawn reaching 8th rank or black pawn reaching 1st rank
+    return (piece == 'P' and end[0] == 0) or (piece == 'p' and end[0] == 7)
+
+def handle_promotion(board, end, color):
+    """Handle pawn promotion"""
+    end_row, end_col = end
+    while True:
+        choice = input("Promote pawn to (Q/R/B/N): ").strip().upper()
+        if choice in ['Q', 'R', 'B', 'N']:
+            board[end_row][end_col] = choice if color == 1 else choice.lower()
+            return True
+    return False

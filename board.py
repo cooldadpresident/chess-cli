@@ -35,7 +35,7 @@ def print_board(board, player_turn):
     # Determine row order based on player's turn
     rows = range(8) if player_turn == 1 else range(7, -1, -1)
     row_labels = range(8, 0, -1) if player_turn == 1 else range(1, 9)
-    col_labels = "a b c d e f g h" if player_turn == 1 else "h g f e d c b a"
+    col_labels = " a  b  c  d  e  f  g  h" if player_turn == 1 else " h  g  f  e  d  c  b  a"
     
     # Print column labels
     print(f"\n     {col_labels}")
